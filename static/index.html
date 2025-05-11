@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Veterinary Management System</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100">
+    <nav class="bg-gradient-to-r from-blue-600 to-blue-500 shadow-lg sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16 items-center">
+                <!-- Logo and Title -->
+                <div class="flex items-center space-x-3">
+                    <img src="https://cdn-icons-png.flaticon.com/512/616/616408.png" alt="Logo" class="h-8 w-8 rounded-full bg-white p-1 shadow" />
+                    <span class="text-2xl font-extrabold text-white tracking-wide">Vet Management</span>
+                </div>
+                <!-- Nav Links -->
+                <div class="hidden md:flex space-x-4 ml-8">
+                    <a href="#" onclick="showSection('owners')" class="px-3 py-2 rounded-md text-sm font-medium text-white hover:bg-white hover:text-blue-600 transition">Owners</a>
+                    <a href="#" onclick="showSection('pets')" class="px-3 py-2 rounded-md text-sm font-medium text-white hover:bg-white hover:text-blue-600 transition">Pets</a>
+                    <a href="#" onclick="showSection('appointments')" class="px-3 py-2 rounded-md text-sm font-medium text-white hover:bg-white hover:text-blue-600 transition">Appointments</a>
+                    <a href="#" onclick="showSection('vaccinations')" class="px-3 py-2 rounded-md text-sm font-medium text-white hover:bg-white hover:text-blue-600 transition">Vaccinations</a>
+                    <a href="#" onclick="showSection('feedinglogs')" class="px-3 py-2 rounded-md text-sm font-medium text-white hover:bg-white hover:text-blue-600 transition">Feeding Logs</a>
+                    <a href="#" onclick="showSection('medicalhistory')" class="px-3 py-2 rounded-md text-sm font-medium text-white hover:bg-white hover:text-blue-600 transition">Medical History</a>
+                </div>
+                <!-- User Info and Logout -->
+                <div class="flex items-center space-x-4">
+                    <span class="text-sm text-white font-medium" id="userInfo"></span>
+                    <img src="https://ui-avatars.com/api/?name=User&background=0D8ABC&color=fff" alt="User" class="h-8 w-8 rounded-full border-2 border-white shadow" />
+                    <button onclick="logout()" class="px-3 py-2 rounded-md text-sm font-medium text-white bg-transparent border border-white hover:bg-white hover:text-blue-600 transition">Logout</button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <!-- Owners Section -->
+        <div id="owners" class="section">
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-2xl font-bold text-gray-900">Owners</h2>
+                <button onclick="showAddOwnerModal()" class="bg-white text-blue-600 border border-blue-600 px-4 py-2 rounded-md font-semibold shadow hover:bg-blue-600 hover:text-white transition mt-2">Add New Owner</button>
+            </div>
+            <div class="bg-white shadow-md rounded-lg overflow-hidden">
+                <table class="min-w-full divide-y divide-gray-200">
+                    <thead class="bg-gray-50">
+                        <tr>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">ID</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Name</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Email</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Phone</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="ownersTableBody" class="bg-white divide-y divide-gray-200"></tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Pets Section -->
+        <div id="pets" class="section hidden">
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-2xl font-bold text-gray-900">Pets</h2>
+                <button onclick="showAddPetModal()" class="bg-white text-blue-600 border border-blue-600 px-4 py-2 rounded-md font-semibold shadow hover:bg-blue-600 hover:text-white transition mt-2">Add New Pet</button>
+            </div>
+            <div class="bg-white shadow-md rounded-lg overflow-hidden">
+                <table class="min-w-full divide-y divide-gray-200">
+                    <thead class="bg-gray-50">
+                        <tr>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">ID</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Name</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Species</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Breed</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date of Birth</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="petsTableBody" class="bg-white divide-y divide-gray-200"></tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Appointments Section -->
+        <div id="appointments" class="section hidden">
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-2xl font-bold text-gray-900">Appointments</h2>
+                <button onclick="showAddAppointmentModal()" class="bg-white text-blue-600 border border-blue-600 px-4 py-2 rounded-md font-semibold shadow hover:bg-blue-600 hover:text-white transition mt-2">Add New Appointment</button>
+            </div>
+            <div class="bg-white shadow-md rounded-lg overflow-hidden">
+                <table class="min-w-full divide-y divide-gray-200">
+                    <thead class="bg-gray-50">
+                        <tr>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">ID</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Pet Name</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Reason</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Vet Name</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="appointmentsTableBody"></tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Vaccinations Section -->
+        <div id="vaccinations" class="section hidden">
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-2xl font-bold text-gray-900">Vaccinations</h2>
+                <button onclick="showAddVaccinationModal()" class="bg-white text-blue-600 border border-blue-600 px-4 py-2 rounded-md font-semibold shadow hover:bg-blue-600 hover:text-white transition mt-2">Add New Vaccination</button>
+            </div>
+            <div class="bg-white shadow-md rounded-lg overflow-hidden">
+                <table class="min-w-full divide-y divide-gray-200">
+                    <thead class="bg-gray-50">
+                        <tr>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">ID</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Pet Name</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Vaccine Name</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Next Due</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="vaccinationsTableBody"></tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Feeding Logs Section -->
+        <div id="feedinglogs" class="section hidden">
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-2xl font-bold text-gray-900">Feeding Logs</h2>
+                <button onclick="showAddFeedingLogModal()" class="bg-white text-blue-600 border border-blue-600 px-4 py-2 rounded-md font-semibold shadow hover:bg-blue-600 hover:text-white transition mt-2">Add New Feeding Log</button>
+            </div>
+            <div class="bg-white shadow-md rounded-lg overflow-hidden">
+                <table class="min-w-full divide-y divide-gray-200">
+                    <thead class="bg-gray-50">
+                        <tr>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">ID</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Pet Name</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Food Type</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Quantity</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="feedingLogsTableBody"></tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Medical History Section -->
+        <div id="medicalhistory" class="section hidden">
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-2xl font-bold text-gray-900">Medical History</h2>
+                <button onclick="showAddMedicalHistoryModal()" class="bg-white text-blue-600 border border-blue-600 px-4 py-2 rounded-md font-semibold shadow hover:bg-blue-600 hover:text-white transition mt-2">Add New Record</button>
+            </div>
+            <div class="bg-white shadow-md rounded-lg overflow-hidden">
+                <table class="min-w-full divide-y divide-gray-200">
+                    <thead class="bg-gray-50">
+                        <tr>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">ID</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Pet Name</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Symptom</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Diagnosis</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Treatment</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="medicalHistoryTableBody"></tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Add Owner Modal -->
+        <div id="addOwnerModal" class="fixed inset-0 bg-gray-500 bg-opacity-75 hidden">
+            <div class="flex items-center justify-center min-h-screen p-4">
+                <div class="bg-white rounded-lg shadow-xl max-w-md w-full">
+                    <div class="px-6 py-4 border-b border-gray-200">
+                        <div class="flex justify-between items-center">
+                            <h3 class="text-lg font-medium text-gray-900">Add New Owner</h3>
+                            <button onclick="closeModal('addOwnerModal')" class="text-gray-400 hover:text-gray-500">
+                                <span class="sr-only">Close</span>
+                                <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="px-6 py-4">
+                        <form id="addOwnerForm" class="space-y-4">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700">Name</label>
+                                <input type="text" name="name" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700">Email</label>
+                                <input type="email" name="email" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700">Phone</label>
+                                <input type="tel" name="phone" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500">
+                            </div>
+                        </form>
+                    </div>
+                    <div class="px-6 py-4 border-t border-gray-200 flex justify-end space-x-3">
+                        <button onclick="closeModal('addOwnerModal')" class="px-4 py-2 border border-gray-300 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-50">Cancel</button>
+                        <button type="button" onclick="addOwner()" class="px-4 py-2 ml-2 bg-blue-600 text-white rounded-md text-sm font-medium hover:bg-blue-700 transition">Add</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Add Pet Modal -->
+        <div id="addPetModal" class="fixed inset-0 bg-gray-500 bg-opacity-75 hidden">
+            <div class="flex items-center justify-center min-h-screen p-4">
+                <div class="bg-white rounded-lg shadow-xl max-w-md w-full">
+                    <div class="px-6 py-4 border-b border-gray-200">
+                        <div class="flex justify-between items-center">
+                            <h3 class="text-lg font-medium text-gray-900">Add New Pet</h3>
+                            <button onclick="closeModal('addPetModal')" class="text-gray-400 hover:text-gray-500">
+                                <span class="sr-only">Close</span>
+                                <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="px-6 py-4">
+                        <form id="addPetForm" class="space-y-4">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700">Name</label>
+                                <input type="text" name="name" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700">Species</label>
+                                <select name="species" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500">
+                                    <option value="">Select species</option>
+                                    <option value="Dog">Dog</option>
+                                    <option value="Cat">Cat</option>
+                                    <option value="Bird">Bird</option>
+                                    <option value="Other">Other</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700">Breed</label>
+                                <input type="text" name="breed" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700">Date of Birth</label>
+                                <input type="date" name="dob" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500">
+                            </div>
+                        </form>
+                    </div>
+                    <div class="px-6 py-4 border-t border-gray-200 flex justify-end space-x-3">
+                        <button onclick="closeModal('addPetModal')" class="px-4 py-2 border border-gray-300 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-50">Cancel</button>
+                        <button type="button" onclick="addPet()" class="px-4 py-2 ml-2 bg-blue-600 text-white rounded-md text-sm font-medium hover:bg-blue-700 transition">Add</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Add Appointment Modal -->
+        <div id="addAppointmentModal" class="fixed inset-0 bg-gray-500 bg-opacity-75 hidden">
+            <div class="flex items-center justify-center min-h-screen p-4">
+                <div class="bg-white rounded-lg shadow-xl max-w-md w-full">
+                    <div class="px-6 py-4 border-b border-gray-200">
+                        <div class="flex justify-between items-center">
+                            <h3 class="text-lg font-medium text-gray-900">Add New Appointment</h3>
+                            <button onclick="closeModal('addAppointmentModal')" class="text-gray-400 hover:text-gray-500">
+                                <span class="sr-only">Close</span>
+                                <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="px-6 py-4">
+                        <form id="addAppointmentForm" class="space-y-4">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700">Pet</label>
+                                <select name="pet_id" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500">
+                                    <option value="">Select a pet</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700">Date and Time</label>
+                                <input type="datetime-local" name="appointment_date" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700">Reason</label>
+                                <textarea name="reason" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500"></textarea>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700">Vet Name</label>
+                                <input type="text" name="vet_name" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500">
+                            </div>
+                        </form>
+                    </div>
+                    <div class="px-6 py-4 border-t border-gray-200 flex justify-end space-x-3">
+                        <button onclick="closeModal('addAppointmentModal')" class="px-4 py-2 border border-gray-300 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-50">Cancel</button>
+                        <button type="button" onclick="addAppointment()" class="px-4 py-2 ml-2 bg-blue-600 text-white rounded-md text-sm font-medium hover:bg-blue-700 transition">Add</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Add Vaccination Modal -->
+        <div id="addVaccinationModal" class="fixed inset-0 bg-gray-500 bg-opacity-75 hidden">
+            <div class="flex items-center justify-center min-h-screen p-4">
+                <div class="bg-white rounded-lg shadow-xl max-w-md w-full">
+                    <div class="px-6 py-4 border-b border-gray-200">
+                        <div class="flex justify-between items-center">
+                            <h3 class="text-lg font-medium text-gray-900">Add New Vaccination</h3>
+                            <button onclick="closeModal('addVaccinationModal')" class="text-gray-400 hover:text-gray-500">
+                                <span class="sr-only">Close</span>
+                                <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="px-6 py-4">
+                        <form id="addVaccinationForm" class="space-y-4">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700">Pet</label>
+                                <select name="pet_id" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500">
+                                    <option value="">Select a pet</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700">Vaccine Name</label>
+                                <input type="text" name="vaccine_name" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700">Vaccination Date</label>
+                                <input type="date" name="vaccination_date" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700">Next Due Date</label>
+                                <input type="date" name="next_due_date" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500">
+                            </div>
+                        </form>
+                    </div>
+                    <div class="px-6 py-4 border-t border-gray-200 flex justify-end space-x-3">
+                        <button onclick="closeModal('addVaccinationModal')" class="px-4 py-2 border border-gray-300 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-50">Cancel</button>
+                        <button type="button" onclick="addVaccination()" class="px-4 py-2 ml-2 bg-blue-600 text-white rounded-md text-sm font-medium hover:bg-blue-700 transition">Add</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Add Feeding Log Modal -->
+        <div id="addFeedingLogModal" class="fixed inset-0 bg-gray-500 bg-opacity-75 hidden">
+            <div class="flex items-center justify-center min-h-screen p-4">
+                <div class="bg-white rounded-lg shadow-xl max-w-md w-full">
+                    <div class="px-6 py-4 border-b border-gray-200">
+                        <div class="flex justify-between items-center">
+                            <h3 class="text-lg font-medium text-gray-900">Add New Feeding Log</h3>
+                            <button onclick="closeModal('addFeedingLogModal')" class="text-gray-400 hover:text-gray-500">
+                                <span class="sr-only">Close</span>
+                                <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="px-6 py-4">
+                        <form id="addFeedingLogForm" class="space-y-4">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700">Pet</label>
+                                <select name="pet_id" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500">
+                                    <option value="">Select a pet</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700">Date and Time</label>
+                                <input type="datetime-local" name="date" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700">Food Type</label>
+                                <input type="text" name="food_type" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700">Quantity</label>
+                                <input type="text" name="quantity" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500">
+                            </div>
+                        </form>
+                    </div>
+                    <div class="px-6 py-4 border-t border-gray-200 flex justify-end space-x-3">
+                        <button onclick="closeModal('addFeedingLogModal')" class="px-4 py-2 border border-gray-300 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-50">Cancel</button>
+                        <button type="button" onclick="addFeedingLog()" class="px-4 py-2 ml-2 bg-blue-600 text-white rounded-md text-sm font-medium hover:bg-blue-700 transition">Add</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Add Medical History Modal -->
+        <div id="addMedicalHistoryModal" class="fixed inset-0 bg-gray-500 bg-opacity-75 hidden">
+            <div class="flex items-center justify-center min-h-screen p-4">
+                <div class="bg-white rounded-lg shadow-xl max-w-md w-full">
+                    <div class="px-6 py-4 border-b border-gray-200">
+                        <div class="flex justify-between items-center">
+                            <h3 class="text-lg font-medium text-gray-900">Add New Medical Record</h3>
+                            <button onclick="closeModal('addMedicalHistoryModal')" class="text-gray-400 hover:text-gray-500">
+                                <span class="sr-only">Close</span>
+                                <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="px-6 py-4">
+                        <form id="addMedicalHistoryForm" class="space-y-4">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700">Pet</label>
+                                <select name="pet_id" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500">
+                                    <option value="">Select a pet</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700">Record Date</label>
+                                <input type="date" name="record_date" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700">Symptom</label>
+                                <textarea name="symptom" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500"></textarea>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700">Diagnosis</label>
+                                <textarea name="diagnosis" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500"></textarea>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700">Treatment</label>
+                                <textarea name="treatment" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500"></textarea>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700">Vet Name</label>
+                                <input type="text" name="vet_name" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500">
+                            </div>
+                        </form>
+                    </div>
+                    <div class="px-6 py-4 border-t border-gray-200 flex justify-end space-x-3">
+                        <button onclick="closeModal('addMedicalHistoryModal')" class="px-4 py-2 border border-gray-300 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-50">Cancel</button>
+                        <button type="button" onclick="addMedicalHistory()" class="px-4 py-2 ml-2 bg-blue-600 text-white rounded-md text-sm font-medium hover:bg-blue-700 transition">Add</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html> 
