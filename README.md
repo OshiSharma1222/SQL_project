@@ -17,8 +17,7 @@ A modern, full-stack web application for managing veterinary clinic operations, 
 
 ### 1. Clone the Repository
 ```
-git clone <your-repo-url>
-cd <project-folder>
+git clone <(https://github.com/OshiSharma1222/SQL_project.git)>
 ```
 
 ### 2. Install Dependencies
